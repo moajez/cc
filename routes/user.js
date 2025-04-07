@@ -30,12 +30,23 @@ router.get("/logout", (req, res) => {
 
 router.post("/signup", async (req, res) => {
   const { fullName, email, password } = req.body;
-  await User.create({
-    fullName,
-    email,
-    password,
-  });
-  return res.redirect("/");
+  try {
+    await User.create({
+      fullName,
+      email,
+      password,
+    });
+    return res.redirect("/");
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.render("signup", {
+        error: "Email already exists. Please use a different email or sign in."
+      });
+    }
+    return res.render("signup", {
+      error: "Error creating user. Please try again."
+    });
+  }
 });
 
 module.exports = router;

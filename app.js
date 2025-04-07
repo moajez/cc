@@ -17,8 +17,11 @@ const {
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+// Set strictQuery to suppress deprecation warning
+mongoose.set('strictQuery', false);
+
 mongoose
-  .connect(process.env.MONGO_URL)
+  .connect(process.env.MONGO_URI)
   .then((e) => console.log("MongoDB Connected"));
 
 app.set("view engine", "ejs");
